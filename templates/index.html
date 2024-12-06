@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Arc'teryx Scanner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="max-w-3xl mx-auto px-4 py-8">
+        <h1 class="text-2xl md:text-3xl font-bold mb-6">Arc'teryx Scanner</h1>
+
+        <div class="bg-white rounded-lg shadow p-4 md:p-6 mb-6">
+            <form id="scanForm" class="space-y-6">
+                <!-- Product Information -->
+                <div class="border-b pb-4">
+                    <h2 class="text-lg md:text-xl font-semibold mb-4">Product Information</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Product URLs</label>
+                            <textarea id="url" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border h-24" placeholder="Enter product URLs (one per line)"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Filter Rule</label>
+                            <textarea id="filterRule" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border h-24" placeholder="Enter filter rules..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Information -->
+                <div class="border-b pb-4">
+                    <h2 class="text-lg md:text-xl font-semibold mb-4">Payment Information</h2>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Gift Cards</label>
+                        <textarea id="giftCards" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border h-24" placeholder="Enter one gift card per line"></textarea>
+                    </div>
+                </div>
+
+                <!-- Shipping Information -->
+                <div class="border-b pb-4">
+                    <h2 class="text-lg md:text-xl font-semibold mb-4">Shipping Information</h2>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">First Name</label>
+                                <input type="text" id="firstName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Last Name</label>
+                                <input type="text" id="lastName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Country</label>
+                            <select id="country" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                <option value="">Select Country</option>
+                                <option value="AT">Austria</option>
+                                <option value="BE">Belgium</option>
+                                <option value="CA">Canada</option>
+                                <option value="CH">Switzerland</option>
+                                <option value="CZ">Czech Republic</option>
+                                <option value="DE">Germany</option>
+                                <option value="DK">Denmark</option>
+                                <option value="ES">Spain</option>
+                                <option value="FI">Finland</option>
+                                <option value="FR">France</option>
+                                <option value="GB">United Kingdom</option>
+                                <option value="IE">Ireland</option>
+                                <option value="IT">Italy</option>
+                                <option value="NL">Netherlands</option>
+                                <option value="NO">Norway</option>
+                                <option value="PL">Poland</option>
+                                <option value="SE">Sweden</option>
+                                <option value="US">United States</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Full Address</label>
+                            <input type="text" id="address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Additional Information</label>
+                            <input type="text" id="addressExtra" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Postcode</label>
+                                <input type="text" id="postcode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">City</label>
+                                <input type="text" id="city" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Phone Number</label>
+                            <input type="tel" id="phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proxy Settings -->
+                <div class="border-b pb-4">
+                    <h2 class="text-lg md:text-xl font-semibold mb-4">Proxy Settings</h2>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Proxy URL</label>
+                        <input type="text" id="proxy" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                    </div>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button type="submit" id="startBtn" class="flex-1 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 font-medium text-center">Start</button>
+                    <button type="button" id="stopBtn" class="flex-1 bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 font-medium text-center" disabled>Stop</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results Section -->
+        <div class="bg-white rounded-lg shadow p-4 md:p-6">
+            <h2 class="text-lg md:text-xl font-semibold mb-4">Scan Results</h2>
+            <div id="results" class="space-y-3">
+                <!-- Results will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let scanning = false;
+        const form = document.getElementById('scanForm');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const results = document.getElementById('results');
+
+        // Form fields for persistence
+        const formFields = [
+            'url', 'filterRule', 'giftCards', 'firstName', 'lastName',
+            'email', 'country', 'address', 'addressExtra', 'postcode',
+            'city', 'phone', 'proxy'
+        ];
+
+        // Load saved data
+        document.addEventListener('DOMContentLoaded', () => {
+            formFields.forEach(field => {
+                const value = localStorage.getItem(field);
+                const element = document.getElementById(field);
+                if (value && element) {
+                    element.value = value;
+                }
+            });
+        });
+
+        // Auto-save on input
+        formFields.forEach(field => {
+            const element = document.getElementById(field);
+            if (element) {
+                element.addEventListener('input', debounce(function() {
+                    localStorage.setItem(field, this.value);
+                }, 500));
+            }
+        });
+
+        // Debounce function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func.apply(this, args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            if (!scanning) {
+                const formData = {
+                    urls: document.getElementById('url').value.split('\n').filter(url => url.trim()),
+                    filter_rule: document.getElementById('filterRule').value,
+                    gift_cards: document.getElementById('giftCards').value.split('\n').filter(card => card.trim()),
+                    shipping_info: {
+                        first_name: document.getElementById('firstName').value,
+                        last_name: document.getElementById('lastName').value,
+                        email: document.getElementById('email').value,
+                        country: document.getElementById('country').value,
+                        address: document.getElementById('address').value,
+                        address_extra: document.getElementById('addressExtra').value,
+                        postcode: document.getElementById('postcode').value,
+                        city: document.getElementById('city').value,
+                        phone: document.getElementById('phone').value
+                    },
+                    proxy: document.getElementById('proxy').value
+                };
+
+                try {
+                    const response = await fetch('/start_scan', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    if (response.ok) {
+                        scanning = true;
+                        startBtn.disabled = true;
+                        stopBtn.disabled = false;
+                        startPolling();
+                    } else {
+                        const error = await response.json();
+                        alert(error.message || 'Failed to start scanning');
+                    }
+                } catch (error) {
+                    alert('Connection error');
+                }
+            }
+        };
+
+        stopBtn.onclick = async () => {
+            try {
+                const response = await fetch('/stop_scan', {
+                    method: 'POST'
+                });
+                if (response.ok) {
+                    scanning = false;
+                    startBtn.disabled = false;
+                    stopBtn.disabled = true;
+                }
+            } catch (error) {
+                alert('Failed to stop scanning');
+            }
+        };
+
+        function addResult(data) {
+            const div = document.createElement('div');
+            div.className = 'p-3 border rounded-lg';
+            const statusColor = {
+                'Scanning': 'text-blue-600',
+                'Found Stock': 'text-green-600',
+                'Attempting Purchase': 'text-yellow-600',
+                'Purchase Failed': 'text-red-600',
+                'Purchase Success': 'text-green-600'
+            }[data.status] || 'text-gray-600';
+
+            div.innerHTML = `
+                <div class="flex flex-col gap-1">
+                    <p class="text-xs text-gray-500">${data.timestamp}</p>
+                    <p class="font-medium">${data.product}</p>
+                    <p class="text-sm">${data.color} - Size ${data.size}</p>
+                    <p class="text-sm">Price: $${data.price} - Stock: ${data.stock}</p>
+                    <p class="${statusColor} font-medium text-sm">${data.status}</p>
+                </div>
+            `;
+            results.insertBefore(div, results.firstChild);
+        }
+
+        async function startPolling() {
+            while (scanning) {
+                try {
+                    const response = await fetch('/get_status');
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.status !== 'Not scanning') {
+                            addResult(data);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Polling error:', error);
+                }
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+        }
+    </script>
+</body>
+</html>

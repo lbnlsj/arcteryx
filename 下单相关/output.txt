@@ -1,0 +1,902 @@
+mr.gql`
+  query getStores(
+    ${t?"$storeCode: String!":"$term: String!, $radius: Int!"}
+  ) {
+    pickupLocations(
+      sort: { distance: ASC }
+      ${t?"filters: { pickup_location_code: { eq: $storeCode } }":"area: { radius: $radius, search_term: $term }"}
+    ) {
+      items {
+        pickup_location_code
+        name
+        description
+        latitude
+        longitude
+        country_id
+        region
+        region_code
+        city
+        street
+        postcode
+        phone
+      }
+    }
+  }
+`
+
+mr.gql`query getSkuInventory($skus: [String!]!, $storeSources: [String!]!) {
+  arcProductsSources(
+    skus: $skus
+    sources: $storeSources
+  ) {
+    items {
+      sku
+      sources {
+        source
+        qty
+      }
+    }
+  }
+}`
+
+mr.gql`
+  sku
+  slug
+  name
+  marketingname
+  marketingnameenglish
+  productcollectioncode
+  is_returnable
+  isfootwear
+  gendercode
+  isnewsizing
+`
+
+mr.gql`
+  price_range {
+    minimum_price{
+      regular_price{
+        value
+        currency
+      }
+      discount {
+        amount_off
+        percent_off
+      }
+      final_price {
+        value
+        currency
+        }
+      }
+    maximum_price{
+      regular_price{
+        value
+        currency
+      }
+      discount {
+        amount_off
+        percent_off
+      }
+      final_price {
+        value
+        currency
+      }
+    }
+  }
+`
+
+mr.gql`
+  ... on ConfigurableProduct {
+    configurable_options {
+      id
+      label
+      position
+      use_default
+      attribute_code
+      values {
+        value_index
+        label
+        store_label
+      }
+      product_id
+    }
+  }
+`
+
+mr.gql`
+  ...on ConfigurableProduct {
+    variants {
+      product {
+        sku
+        upc
+        badge_data
+        color_data
+        size_data
+        quantity_available
+        productimage
+        price_range {
+          maximum_price{
+            regular_price{
+              value
+              currency
+            }
+            discount {
+              amount_off
+              percent_off
+            }
+            final_price {
+              value
+              currency
+            }
+          }
+        }
+      }
+      attributes {
+        code
+        label
+        value_index
+      }
+    }
+  }
+`
+
+mr.gql`
+aggregations {
+  attribute_code
+  label
+
+  options {
+    count
+    label
+    label_en
+    value
+  }
+}
+`
+
+mr.gql`query ${e} {
+
+  products(filter: ${t}) {
+    items {
+      ${mfe}
+      ${Tot}
+      ${Rot}
+      ${Iot}
+      ... on PhysicalProductInterface {
+        weight
+      }
+      shortdescription
+      longdescription
+      awardswidget_data
+      brochuremode
+      brochuremode2
+      campaignvideowidget
+      carevideowidget
+      carewidget_data
+      originalyear
+      compareproductswidget_tasmb
+      manufacturingfacility_data
+      ancillarymanufacturingfacility_data
+      breadcrumbs_data
+      harness
+      materials_c8_data
+      miniwidget
+      miniwidget_data
+      keyfeatureswidget_data
+      sizingfitwidget
+      sizingchart_data
+      technicalinfowidget_data
+      alternateviews
+      carevideowidget_data
+      campaignwidget_data
+      layeringwidget_tasmb_data
+      compareproductswidget_tasmb_data
+      customerservicetipswidget_data
+      modelmetric_primary_data
+      modelmetric_secondary_data
+      isnew
+      isrevised
+      footwearweight
+      packweightsml
+      packweighttall
+      packweightshort
+      packweightregular
+      packweightonesize
+      packvolumetall
+      packvolumeshort
+      packvolumeonesize
+      packvolumeregular
+      packvolumeextendedonesize
+      videosnippets
+      conversionvideos
+      hideprice
+      othermaterialdescription
+      miscellaneouswidget_data
+    }
+
+    ${hfe}
+
+  }
+
+}`
+
+mr.gql`query ${e} {
+  products(filter: ${t}, pageSize: ${n}) {
+    items {
+      name
+      sku
+      price_range {
+        minimum_price{
+            regular_price{
+              value
+              currency
+            }
+            discount {
+              amount_off
+              percent_off
+            }
+            final_price {
+              value
+              currency
+            }
+        }
+        maximum_price{
+          regular_price{
+            value
+            currency
+          }
+          discount {
+            amount_off
+            percent_off
+          }
+          final_price {
+            value
+            currency
+          }
+        }
+      }
+    }
+  }
+}`
+
+mr.gql`query ${e} {
+  products(filter: ${t}, pageSize: ${n}) {
+    items {
+      name
+      sku
+      ...on ConfigurableProduct {
+        variants {
+          product {
+            sku
+            quantity_available
+          }
+        }
+      }
+    }
+  }
+}`
+
+mr.gql`query ${e} {
+  products(filter: ${t}, pageSize: ${n}) {
+    items {
+      name
+      sku
+      price_range {
+        minimum_price{
+          regular_price{
+            value
+            currency
+          }
+          discount {
+            amount_off
+            percent_off
+          }
+          final_price {
+            value
+            currency
+          }
+        }
+        maximum_price{
+          regular_price{
+            value
+            currency
+          }
+          discount {
+            amount_off
+            percent_off
+          }
+          final_price {
+            value
+            currency
+          }
+        }
+      }
+      ...on ConfigurableProduct {
+        variants {
+          product {
+            sku
+            quantity_available
+          }
+        }
+      }
+    }
+  }
+}`
+
+mr.gql`query ${e} {
+
+  products(filter: ${t}) {
+    ${hfe}
+  }
+
+}`
+
+mr.gql`
+  shipping_addresses {
+    firstname
+    lastname
+    street
+    city
+    postcode
+    is_po_box
+    region {
+      code
+      label
+      region_id
+    }
+    country {
+      code
+      label
+    }
+    telephone
+    pickup_location_code
+    available_shipping_methods {
+      amount {
+        currency
+        value
+      }
+      available
+      carrier_code
+      carrier_title
+      error_message
+      method_code
+      method_title
+      price_excl_tax {
+        value
+        currency
+      }
+      price_incl_tax {
+        value
+        currency
+      }
+    }
+    selected_shipping_method {
+      amount {
+        value
+        currency
+      }
+      carrier_code
+      method_code
+      carrier_title
+      method_title
+    }
+  }
+`
+
+mr.gql`
+  billing_address {
+    firstname
+    lastname
+    company
+    street
+    city
+    region{
+      code
+      label
+      region_id
+    }
+    postcode
+    telephone
+    country{
+      code
+      label
+    }
+  }
+`
+
+mr.gql`
+  cart {
+    id
+    email
+  }
+`
+
+mr.gql`
+cart {
+      email
+      id
+      shipping_addresses{
+        selected_shipping_method{
+          carrier_code
+          carrier_title
+          method_code
+          method_title
+          amount{
+            value
+            currency
+          }
+        }
+      }
+    }
+`
+
+mr.gql`
+cart${e?"(cart_id: $cartId)":""} {
+  email
+  id
+  total_quantity
+
+  items {
+    id
+    quantity
+    arc_sap_sourcing
+    arc_original_country_price
+    is_available
+    prices {
+      price {
+        value
+        currency
+      }
+      discounts {
+        label
+        amount {
+          value
+          currency
+        }
+      }
+    }
+
+    product {
+      ${mfe}
+    }
+
+    ... on ConfigurableCartItem {
+      configured_variant {
+        sku
+        upc
+        color_data
+        size_data
+        quantity_available
+        productimage
+      }
+    }
+  }
+
+  applied_coupons {
+    code
+  }
+  discount_notice
+  ${Got}
+  ${Wot}
+  prices {
+    grand_total {
+      value
+      currency
+    }
+    subtotal_excluding_tax {
+      value
+      currency
+    }
+    subtotal_including_tax {
+      value
+      currency
+    }
+    merged_taxes {
+      amount{
+          value
+          currency
+      }
+      label
+      percent
+    }
+    discounts {
+      label
+      amount {
+        value
+        currency
+      }
+    }
+  }
+  selected_payment_method {
+    code
+    title
+  }
+}`
+
+mr.gql`
+  mutation createEmptyCart {
+    createEmptyCart
+  }
+`
+
+mr.gql`
+  query getCart($cartId: String!) {
+    ${hl(!0)}
+  }
+`
+
+mr.gql`
+  mutation addConfigurableProductsToCart($cartId: String!, $preSku: String!, $preParentSku: String!, $quantity: Float!) {
+    addConfigurableProductsToCart(
+      input: { cart_id: $cartId, cart_items: [{ parent_sku: $preParentSku, data: { quantity: $quantity, sku: $preSku } }] }
+    ) {
+      ${hl()}
+    }
+  }
+`
+
+mr.gql`
+  mutation addConfigurableProductsToCart(
+  $cartId: String!,
+  $cartItems: [ConfigurableProductCartItemInput]!
+  ) {
+    addConfigurableProductsToCart(
+      input: { cart_id: $cartId, cart_items: $cartItems }
+    ) {
+      ${hl()}
+    }
+  }
+`
+
+mr.gql`
+  mutation removeItemFromCartMutation($cartId: String!, $cartItemId: Int!) {
+    removeItemFromCart(input: { cart_id: $cartId, cart_item_id: $cartItemId }) {
+      ${hl()}
+    }
+  }
+`
+
+mr.gql`
+  mutation updateCartItemsMutation($cartId: String!, $cartItemId: Int!, $quantity: Float!) {
+    updateCartItems(input: { cart_id: $cartId, cart_items: [{ cart_item_id: $cartItemId, quantity: $quantity }] }) {
+      ${hl()}
+    }
+  }
+`
+
+mr.gql`
+  mutation updateCartItemsMutation($cartId: String!, $cartItems: [CartItemUpdateInput!]!) {
+    updateCartItems(input: { cart_id: $cartId, cart_items: $cartItems }) {
+      ${hl()}
+    }
+  }
+`
+
+mr.gql`
+  mutation applyCouponToCartMutation($cartId: String!, $code: String!) {
+    applyCouponToCart(input: { cart_id: $cartId, coupon_code: $code }) {
+      ${hl()}
+    }
+  }
+`
+
+mr.gql`
+  mutation removeCouponFromCartMutation($cartId: String!) {
+    removeCouponFromCart(input: { cart_id: $cartId }) {
+      ${hl()}
+    }
+  }
+`
+
+mr.gql`
+  mutation setGuestEmailOnCart($cartId: String!, $email: String!, $arcNewsletterOptins: Boolean!) {
+    setGuestEmailOnCart(input: { cart_id: $cartId, email: $email, arc_newsletter_optins: $arcNewsletterOptins }) {
+      ${hl()}
+    }
+  }
+`
+
+mr.gql`
+  mutation setShippingAddressMutation(
+    $cartId: String!,
+    $firstName: String!,
+    $lastName: String!,
+    $street: [String]!,
+    $city: String!,
+    $region: String!,
+    $regionId: Int,
+    $postcode: String!,
+    $country: String!,
+    $phone: String!,
+    $isPoBox: Boolean!,
+    ${t?"$pickUpCode: String!,":""}
+  ) {
+    setShippingAddressesOnCart(
+      input: {
+        cart_id: $cartId
+        shipping_addresses: {
+          address: {
+            firstname: $firstName
+            lastname: $lastName
+            street: $street
+            city: $city
+            region: $region
+            region_id: $regionId
+            postcode: $postcode
+            country_code: $country
+            telephone: $phone
+            is_po_box: $isPoBox
+            save_in_address_book: false
+          },
+          ${t?"pickup_location_code: $pickUpCode":""}
+        }
+      }
+    ) {
+      ${n?yfe():hl()}
+    }
+  }
+`
+
+mr.gql`
+  query getAdyenPaymentMethods(${e?"$cartId: String!, $country: String":"$cartId: String!"}) {
+    adyenPaymentMethods(${e?"cart_id: $cartId, country: $country":"cart_id: $cartId"}) {
+      
+      paymentMethodsExtraDetails {
+        type
+        icon {
+          url
+          width
+          height
+        }
+        isOpenInvoice
+        configuration {
+          amount {
+            value
+            currency
+          }
+          currency
+        }
+      }
+      paymentMethodsResponse {
+        paymentMethods {
+          name
+          type
+          brand
+          brands
+          configuration {
+            merchantId
+            merchantName
+          }
+        }
+      }
+    }
+  }
+`
+
+mr.gql`
+  mutation setBillingAddressMutation(
+    $cartId: String!
+    $firstName: String!
+    $lastName: String!
+    $street: [String]!
+    $city: String!
+    $region: String
+    $regionId: Int
+    $postCode: String
+    $countryCode: String!
+    $telephone: String
+    $arcSaveAddress: Boolean!
+  ) {
+    setBillingAddressOnCart(
+      input: {
+        cart_id: $cartId
+        arc_save_address: $arcSaveAddress
+        billing_address: {
+          address: {
+            firstname: $firstName
+            lastname: $lastName
+            street: $street
+            city: $city
+            region: $region
+            region_id: $regionId
+            postcode: $postCode
+            country_code: $countryCode
+            telephone: $telephone
+            save_in_address_book: false
+          }
+          same_as_shipping: false
+        }
+      }
+    ) {
+      ${e?yfe():hl()}
+    }
+  }
+`
+
+mr.gql`
+  mutation setShippingMethodMutation($cartId: String!, $code: String!, $methodCode: String!) {
+    setShippingMethodsOnCart(
+      input: { cart_id: $cartId, shipping_methods: [{ carrier_code: $code, method_code: $methodCode }] }
+    ) {
+      ${e?qot():hl()}
+    }
+  }
+`
+
+mr.gql`
+  mutation setPaymentMethodMutation($cartId: String!, $paymentMethod: String!) {
+    setPaymentMethodOnCart(input: { cart_id: $cartId, payment_method: { code: $paymentMethod } }) {
+      ${e?`
+
+mr.gql`
+  query getAdyenPaymentStatus($orderNumber: String!, $cartId: String!) {
+    adyenPaymentStatus(orderNumber: $orderNumber, cartId: $cartId) {
+      isFinal
+      resultCode
+      additionalData
+      action
+    }
+  }
+`
+
+mr.gql`
+  mutation getAdyenPaymentDetails($payload: String!, $cartId: String!) {
+    adyenPaymentDetails(payload: $payload, cart_id: $cartId) {
+      isFinal
+      resultCode
+      additionalData
+      action
+    }
+  }
+`
+
+mr.gql`
+  mutation setPaymentMethodAndPlaceOrder(
+    $cartId: String!
+    $paymentMethod: PaymentMethodInput!
+    $additionalData: String
+  ) {
+    setPaymentMethodOnCart(input: { cart_id: $cartId, payment_method: $paymentMethod }) {
+      cart {
+        selected_payment_method {
+          code
+          title
+        }
+      }
+    }
+    placeOrder(input: { cart_id: $cartId, additional_data: $additionalData }) {
+      order {
+        order_number
+        cart_id
+        adyen_payment_status {
+          isFinal
+          resultCode
+          additionalData
+          action
+        }
+      }
+    }
+  }
+`
+
+mr.gql`
+  query getPaymentStatusQuery($orderId: Int!) {
+    paymentStatus(order_id: $orderId) {
+      success
+      threeDS2
+      token
+      type
+      redirect_method
+      redirect_url
+    }
+  }
+`
+
+mr.gql`
+  mutation processThreeDSSecureMutation($payload: ThreeDS2ProcessInput) {
+    threeDS2Process(input: $payload) {
+      threeDS2
+      type
+      token
+      action
+      result
+    }
+  }
+`
+
+mr.gql`
+  mutation ($cartId: String!, $address: CartAddressInput!) {
+    arcAddressValidation(input: { cart_id: $cartId, shipping_addresses: { address: $address } }) {
+      arc_address_validation_attributes {
+        arc_address_validation_state
+        arc_address_validation_classification
+        arc_address_validation_effective_address {
+          firstname
+          lastname
+          company
+          street
+          city
+          postcode
+          telephone
+          country {
+            code
+            label
+          }
+          region {
+            code
+            label
+          }
+        }
+        arc_address_validation_pobox
+      }
+    }
+  }
+`
+
+mr.gql`
+  mutation recreateCartMutation($cartId: String!) {
+    arcCartReactivation(input: { cart_id: $cartId }) {
+      cart_id
+    }
+  }
+`
+
+mr.gql`
+  query adyenPaymentMethodsBalance($payload: String!) {
+    adyenPaymentMethodsBalance(payload: $payload) {
+      balanceResponse
+    }
+  }
+`
+
+mr.gql`
+  mutation adyenSaveStateData($stateData: String!, $cartId: String!) {
+    adyenSaveStateData(stateData: $stateData, cartId: $cartId) {
+      stateDataId
+    }
+  }
+`
+
+mr.gql`
+  mutation adyenRemoveStateData($stateDataId: Int!, $cartId: String!) {
+    adyenRemoveStateData(stateDataId: $stateDataId, cartId: $cartId) {
+      stateDataId
+    }
+  }
+`
+
+mr.gql`
+  query adyenRedeemedGiftcards($cartId: String!) {
+    adyenRedeemedGiftcards(cartId: $cartId) {
+      redeemedGiftcards {
+        stateDataId
+        brand
+        title
+        balance {
+          currency
+          value
+        }
+        deductedAmount
+      }
+      remainingAmount
+      totalDiscount
+    }
+  }
+`
+
+mr.gql`
+  query {
+    countries {
+      id
+      two_letter_abbreviation
+      full_name_english
+      full_name_locale
+      available_regions {
+        id
+        code
+        name
+      }
+    }
+  }
+`
+
