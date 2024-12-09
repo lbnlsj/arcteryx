@@ -1,279 +1,183 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Arc'teryx Scanner</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Arc'teryx 监控系统</title>
+    <link rel="stylesheet" href="./static/style.css">
 </head>
-<body class="bg-gray-100">
-    <div class="max-w-3xl mx-auto px-4 py-8">
-        <h1 class="text-2xl md:text-3xl font-bold mb-6">Arc'teryx Scanner</h1>
+<body>
+    <div class="container">
+        <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 1.5rem;">Arc'teryx 监控系统</h1>
 
-        <div class="bg-white rounded-lg shadow p-4 md:p-6 mb-6">
-            <form id="scanForm" class="space-y-6">
-                <!-- Product Information -->
-                <div class="border-b pb-4">
-                    <h2 class="text-lg md:text-xl font-semibold mb-4">Product Information</h2>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Product URLs</label>
-                            <textarea id="url" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border h-24" placeholder="Enter product URLs (one per line)"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Filter Rule</label>
-                            <textarea id="filterRule" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border h-24" placeholder="Enter filter rules..."></textarea>
-                        </div>
-                    </div>
+        <div class="card">
+            <h2 class="card-title">商品监控</h2>
+            <div id="monitor-list"></div>
+            <button class="button button-blue" onclick="showAddMonitorForm()" style="margin-top: 1rem;">添加监控项目</button>
+            <div id="add-monitor-form" style="display: none; margin-top: 1rem;">
+                <div class="input-group">
+                    <label>主SKU</label>
+                    <input type="text" id="main-sku">
                 </div>
-
-                <!-- Payment Information -->
-                <div class="border-b pb-4">
-                    <h2 class="text-lg md:text-xl font-semibold mb-4">Payment Information</h2>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Gift Cards</label>
-                        <textarea id="giftCards" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border h-24" placeholder="Enter one gift card per line"></textarea>
-                    </div>
+                <div class="input-group">
+                    <label>子SKU</label>
+                    <input type="text" id="child-sku">
                 </div>
-
-                <!-- Shipping Information -->
-                <div class="border-b pb-4">
-                    <h2 class="text-lg md:text-xl font-semibold mb-4">Shipping Information</h2>
-                    <div class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">First Name</label>
-                                <input type="text" id="firstName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Last Name</label>
-                                <input type="text" id="lastName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Email</label>
-                            <input type="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Country</label>
-                            <select id="country" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                                <option value="">Select Country</option>
-                                <option value="AT">Austria</option>
-                                <option value="BE">Belgium</option>
-                                <option value="CA">Canada</option>
-                                <option value="CH">Switzerland</option>
-                                <option value="CZ">Czech Republic</option>
-                                <option value="DE">Germany</option>
-                                <option value="DK">Denmark</option>
-                                <option value="ES">Spain</option>
-                                <option value="FI">Finland</option>
-                                <option value="FR">France</option>
-                                <option value="GB">United Kingdom</option>
-                                <option value="IE">Ireland</option>
-                                <option value="IT">Italy</option>
-                                <option value="NL">Netherlands</option>
-                                <option value="NO">Norway</option>
-                                <option value="PL">Poland</option>
-                                <option value="SE">Sweden</option>
-                                <option value="US">United States</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Full Address</label>
-                            <input type="text" id="address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Additional Information</label>
-                            <input type="text" id="addressExtra" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Postcode</label>
-                                <input type="text" id="postcode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">City</label>
-                                <input type="text" id="city" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Phone Number</label>
-                            <input type="tel" id="phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                        </div>
-                    </div>
+                <div class="input-group">
+                    <label>国家选择</label>
+                    <select id="country">
+                        <option value="US">United States</option>
+                        <option value="CA">Canada</option>
+                        <option value="NL">Netherlands</option>
+                    </select>
                 </div>
-
-                <!-- Proxy Settings -->
-                <div class="border-b pb-4">
-                    <h2 class="text-lg md:text-xl font-semibold mb-4">Proxy Settings</h2>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Proxy URL</label>
-                        <input type="text" id="proxy" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                    </div>
+                <div class="input-group">
+                    <label>购买数量上限</label>
+                    <input type="number" id="purchase-limit" min="1" value="1">
                 </div>
-
-                <!-- Control Buttons -->
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <button type="submit" id="startBtn" class="flex-1 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 font-medium text-center">Start</button>
-                    <button type="button" id="stopBtn" class="flex-1 bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 font-medium text-center" disabled>Stop</button>
-                </div>
-            </form>
+                <button class="button button-green" onclick="addMonitorItem()">确认添加</button>
+            </div>
         </div>
 
-        <!-- Results Section -->
-        <div class="bg-white rounded-lg shadow p-4 md:p-6">
-            <h2 class="text-lg md:text-xl font-semibold mb-4">Scan Results</h2>
-            <div id="results" class="space-y-3">
-                <!-- Results will be populated here -->
+        <div class="card">
+            <h2 class="card-title">礼品卡管理</h2>
+            <div class="drop-zone" id="drop-zone">
+                <p>拖拽Excel文件到此处或点击上传</p>
+                <input type="file" id="file-input" accept=".xlsx,.xls" style="display: none;">
             </div>
+            <div id="file-info"></div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">收货信息</h2>
+            <div class="shipping-grid">
+                <div class="input-group">
+                    <label>名字</label>
+                    <input type="text" id="first-name">
+                </div>
+                <div class="input-group">
+                    <label>姓氏</label>
+                    <input type="text" id="last-name">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>邮箱</label>
+                <input type="email" id="email">
+            </div>
+            <div class="input-group">
+                <label>国家</label>
+                <select id="shipping-country">
+                    <option value="US">United States</option>
+                    <option value="CA">Canada</option>
+                    <option value="NL">Netherlands</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>详细地址</label>
+                <textarea id="address" rows="3"></textarea>
+            </div>
+            <div class="shipping-grid">
+                <div class="input-group">
+                    <label>邮编</label>
+                    <input type="text" id="postcode">
+                </div>
+                <div class="input-group">
+                    <label>城市</label>
+                    <input type="text" id="city">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>电话</label>
+                <input type="tel" id="phone">
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem;">
+            <button class="button button-blue">开始监控</button>
+            <button class="button button-red">停止监控</button>
         </div>
     </div>
 
     <script>
-        let scanning = false;
-        const form = document.getElementById('scanForm');
-        const startBtn = document.getElementById('startBtn');
-        const stopBtn = document.getElementById('stopBtn');
-        const results = document.getElementById('results');
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileInfo = document.getElementById('file-info');
 
-        // Form fields for persistence
-        const formFields = [
-            'url', 'filterRule', 'giftCards', 'firstName', 'lastName',
-            'email', 'country', 'address', 'addressExtra', 'postcode',
-            'city', 'phone', 'proxy'
-        ];
+        dropZone.addEventListener('click', () => fileInput.click());
 
-        // Load saved data
-        document.addEventListener('DOMContentLoaded', () => {
-            formFields.forEach(field => {
-                const value = localStorage.getItem(field);
-                const element = document.getElementById(field);
-                if (value && element) {
-                    element.value = value;
-                }
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.add('dragover');
             });
         });
 
-        // Auto-save on input
-        formFields.forEach(field => {
-            const element = document.getElementById(field);
-            if (element) {
-                element.addEventListener('input', debounce(function() {
-                    localStorage.setItem(field, this.value);
-                }, 500));
-            }
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.remove('dragover');
+            });
         });
 
-        // Debounce function
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func.apply(this, args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
+        dropZone.addEventListener('drop', handleDrop);
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function handleDrop(e) {
+            const files = e.dataTransfer.files;
+            handleFiles(files);
         }
 
-        form.onsubmit = async (e) => {
-            e.preventDefault();
-            if (!scanning) {
-                const formData = {
-                    urls: document.getElementById('url').value.split('\n').filter(url => url.trim()),
-                    filter_rule: document.getElementById('filterRule').value,
-                    gift_cards: document.getElementById('giftCards').value.split('\n').filter(card => card.trim()),
-                    shipping_info: {
-                        first_name: document.getElementById('firstName').value,
-                        last_name: document.getElementById('lastName').value,
-                        email: document.getElementById('email').value,
-                        country: document.getElementById('country').value,
-                        address: document.getElementById('address').value,
-                        address_extra: document.getElementById('addressExtra').value,
-                        postcode: document.getElementById('postcode').value,
-                        city: document.getElementById('city').value,
-                        phone: document.getElementById('phone').value
-                    },
-                    proxy: document.getElementById('proxy').value
-                };
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            handleFiles(files);
+        }
 
-                try {
-                    const response = await fetch('/start_scan', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(formData)
-                    });
-
-                    if (response.ok) {
-                        scanning = true;
-                        startBtn.disabled = true;
-                        stopBtn.disabled = false;
-                        startPolling();
-                    } else {
-                        const error = await response.json();
-                        alert(error.message || 'Failed to start scanning');
-                    }
-                } catch (error) {
-                    alert('Connection error');
+        function handleFiles(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+                    file.type === "application/vnd.ms-excel") {
+                    fileInfo.textContent = `已选择文件: ${file.name}`;
+                    // Here add your Excel parsing logic
+                } else {
+                    fileInfo.textContent = "请上传Excel文件(.xlsx或.xls)";
                 }
             }
-        };
+        }
 
-        stopBtn.onclick = async () => {
-            try {
-                const response = await fetch('/stop_scan', {
-                    method: 'POST'
-                });
-                if (response.ok) {
-                    scanning = false;
-                    startBtn.disabled = false;
-                    stopBtn.disabled = true;
-                }
-            } catch (error) {
-                alert('Failed to stop scanning');
-            }
-        };
+        function showAddMonitorForm() {
+            document.getElementById('add-monitor-form').style.display = 'block';
+        }
 
-        function addResult(data) {
-            const div = document.createElement('div');
-            div.className = 'p-3 border rounded-lg';
-            const statusColor = {
-                'Scanning': 'text-blue-600',
-                'Found Stock': 'text-green-600',
-                'Attempting Purchase': 'text-yellow-600',
-                'Purchase Failed': 'text-red-600',
-                'Purchase Success': 'text-green-600'
-            }[data.status] || 'text-gray-600';
+        function addMonitorItem() {
+            const mainSku = document.getElementById('main-sku').value;
+            const childSku = document.getElementById('child-sku').value;
+            const country = document.getElementById('country').value;
+            const limit = document.getElementById('purchase-limit').value;
 
-            div.innerHTML = `
-                <div class="flex flex-col gap-1">
-                    <p class="text-xs text-gray-500">${data.timestamp}</p>
-                    <p class="font-medium">${data.product}</p>
-                    <p class="text-sm">${data.color} - Size ${data.size}</p>
-                    <p class="text-sm">Price: $${data.price} - Stock: ${data.stock}</p>
-                    <p class="${statusColor} font-medium text-sm">${data.status}</p>
-                </div>
+            const monitorList = document.getElementById('monitor-list');
+            const item = document.createElement('div');
+            item.className = 'monitor-item';
+            item.innerHTML = `
+                <button class="delete-button" onclick="this.parentElement.remove()">×</button>
+                <div>主SKU: ${mainSku}</div>
+                <div>子SKU: ${childSku}</div>
+                <div>国家: ${country}</div>
+                <div>数量上限: ${limit}</div>
             `;
-            results.insertBefore(div, results.firstChild);
-        }
+            monitorList.appendChild(item);
 
-        async function startPolling() {
-            while (scanning) {
-                try {
-                    const response = await fetch('/get_status');
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.status !== 'Not scanning') {
-                            addResult(data);
-                        }
-                    }
-                } catch (error) {
-                    console.error('Polling error:', error);
-                }
-                await new Promise(resolve => setTimeout(resolve, 2000));
-            }
+            // 重置表单
+            document.getElementById('main-sku').value = '';
+            document.getElementById('child-sku').value = '';
+            document.getElementById('country').selectedIndex = 0;
+            document.getElementById('purchase-limit').value = '1';
+            document.getElementById('add-monitor-form').style.display = 'none';
         }
     </script>
 </body>
